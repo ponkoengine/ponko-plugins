@@ -12,17 +12,20 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DistributionTests(unittest.TestCase):
-    def test_directory_archive_has_no_local_server_or_executable_files(self):
+    def test_release_archive_contains_complete_root_plugin(self):
         subprocess.run([sys.executable, str(ROOT / "scripts/package.py"), "--check", "--zip"], check=True)
         version = json.loads((ROOT / "plugin.json").read_text())["version"]
-        with zipfile.ZipFile(ROOT / "dist" / f"ponko-claude-directory-{version}.zip") as archive:
+        with zipfile.ZipFile(ROOT / "dist" / f"ponko-{version}.zip") as archive:
             names = archive.namelist()
             manifest = json.loads(archive.read("ponko/.claude-plugin/plugin.json"))
-            self.assertNotIn("mcpServers", manifest)
             self.assertIn("ponko/skills/ponko/references/docs.md", names)
             self.assertIn("ponko/" + manifest["icon"].removeprefix("./"), names)
-            self.assertFalse(any(name.endswith((".py", ".cjs")) or name.endswith("mcp.json")
-                                 for name in names))
+            mcp = json.loads(archive.read("ponko/.mcp.json"))
+            launcher = mcp["mcpServers"]["ponko"]["args"][0]
+            self.assertIn("ponko/" + launcher.removeprefix("${CLAUDE_PLUGIN_ROOT}/"), names)
+            self.assertIn("ponko/mcp.json", names)
+            self.assertNotIn("ponko/scripts/package.py", names)
+            self.assertNotIn("ponko/scripts/smoke_mcp.py", names)
 
     def test_smoke_child_does_not_receive_installer_credentials(self):
         spec = importlib.util.spec_from_file_location("smoke", ROOT / "scripts/smoke_mcp.py")

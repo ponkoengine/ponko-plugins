@@ -21,28 +21,23 @@ client's plugin update/install controls.
 
 ## Claude / Anthropic
 
-For the account shown in the submission portal, submit **`submissions/claude`**
-as the plugin directory in `ponkoengine/ponko-plugins`, branch `main`. That folder
-is a generated skills-and-documentation bundle with an icon. It contains no
-MCP configuration, launcher, maintenance scripts, or tests. It preserves all
-four skills; runtime tools are optional and configured separately by the user.
-The corresponding ZIP is `dist/ponko-claude-directory-<version>.zip`.
+Submit the repository root (`.`) in `ponkoengine/ponko-plugins`, branch `main`.
+It is the same full package used for direct installation: all four skills,
+documentation, the official icon, and a local MCP server entry point. The release
+archive is `dist/ponko-<version>.zip`.
 
-The repository root remains the full local integration for direct installation.
-Its Claude MCP command uses a bundled Node.js launcher reading the canonical
+The Claude MCP command uses a bundled Node.js launcher reading the canonical
 `mcp.json`. The portal restricts local MCP servers to Verified organizations;
-the launcher fixes command inspection but does not bypass that account gate.
-Only submit the root as a local-MCP bundle once the organization qualifies.
+the launcher fixes command inspection but does not satisfy that account requirement.
 
-1. Run `claude plugin validate submissions/claude --profile directory --strict` and test the plugin in Claude Code
+1. Run `claude plugin validate . --profile directory --strict` and test the plugin in Claude Code
    against a disposable game. Check the current
    [pre-submission requirements](https://code.claude.com/docs/en/plugins/publish).
 2. Open [Anthropic's developer portal](https://claude.ai/directory/manage) and
    submit the plugin using its current upload flow. A paid Claude plan and
    the appropriate account/organization permission are required.
 3. Supply the requested publisher details, listing text, demonstrations, and
-   support information. The skills-only bundle does not run a local server.
-   The full plugin's local MCP runs in Claude Code and Cowork, not claude.ai.
+   support information. The plugin's local MCP runs in Claude Code and Cowork, not claude.ai.
 4. Resolve portal findings and submit for review. Publish through the portal
    once approved.
 

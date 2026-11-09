@@ -91,12 +91,9 @@ The full Claude plugin uses a bundled Node.js launcher to start the executable
 configured in `mcp.json`. Install Node.js for this route. Other hosts use the
 portable MCP definition directly.
 
-For the public Claude Directory submission, use the generated
-[`submissions/claude`](submissions/claude) folder. It supplies all four workflows
-and documentation without registering a local server, so it does not require
-the local-MCP organization verification shown by the portal. Runtime tools can
-be configured separately with the MCP-only command below. See
-[the submission instructions](MARKETPLACES.md#claude--anthropic).
+For the public Claude Directory submission, use this repository's root (`.`),
+branch `main`. The same package includes all skills, docs, the icon, and the MCP
+launcher. See [the submission instructions](MARKETPLACES.md#claude--anthropic).
 
 For a local checkout, run this from your **game** project:
 
@@ -249,7 +246,6 @@ disable every side effect (for example, captures and traces can write files).
 | `.codex-plugin/`, `.agents/plugins/` | Codex compatibility manifest and marketplace |
 | `.cursor-plugin/` | Cursor manifest (uses portable `mcp.json`) |
 | `.mcp.json`, `scripts/launch-mcp.cjs` | Claude's inspectable MCP entry point |
-| `submissions/claude/` | Generated skills-only Claude Directory source |
 | `gemini-extension.json`, `GEMINI.md` | Gemini CLI extension |
 | `skills/` | Shared engine guidance, setup, inspection, and profiling workflows |
 | `configs/` | MCP-only and observation templates |
@@ -272,10 +268,9 @@ your games. The ZIP is written to `dist/ponko-<version>.zip`; it contains the pl
 files, not the engine executable. Host UI discovery and a real game session
 still need manual acceptance in each host.
 
-The second archive, `dist/ponko-claude-directory-<version>.zip`, contains only the
-Claude Directory skills bundle. Neither archive includes repository maintenance
-or test scripts. Both include the official icon from `https://ponko.dev/favicon.svg`,
-rasterized to a square PNG for the directory.
+The single release archive includes the full plugin and the official icon from
+`https://ponko.dev/favicon.svg`, rasterized to a square PNG. Repository maintenance
+and test scripts are excluded from the archive.
 
 See [MARKETPLACES.md](MARKETPLACES.md) for public directory submission steps,
 including the extra requirements for a local MCP server.
