@@ -21,15 +21,28 @@ client's plugin update/install controls.
 
 ## Claude / Anthropic
 
-1. Run `claude plugin validate . --strict` and test the plugin in Claude Code
+For the account shown in the submission portal, submit **`submissions/claude`**
+as the plugin directory in `ponkoengine/ponko-plugins`, branch `main`. That folder
+is a generated skills-and-documentation bundle with an icon. It contains no
+MCP configuration, launcher, maintenance scripts, or tests. It preserves all
+four skills; runtime tools are optional and configured separately by the user.
+The corresponding ZIP is `dist/ponko-claude-directory-<version>.zip`.
+
+The repository root remains the full local integration for direct installation.
+Its Claude MCP command uses a bundled Node.js launcher reading the canonical
+`mcp.json`. The portal restricts local MCP servers to Verified organizations;
+the launcher fixes command inspection but does not bypass that account gate.
+Only submit the root as a local-MCP bundle once the organization qualifies.
+
+1. Run `claude plugin validate submissions/claude --profile directory --strict` and test the plugin in Claude Code
    against a disposable game. Check the current
    [pre-submission requirements](https://code.claude.com/docs/en/plugins/publish).
 2. Open [Anthropic's developer portal](https://claude.ai/directory/manage) and
    submit the plugin using its current upload flow. A paid Claude plan and
    the appropriate account/organization permission are required.
 3. Supply the requested publisher details, listing text, demonstrations, and
-   support information. Review the component support table: local MCP execution
-   in Claude Code does not establish support on claude.ai or Cowork.
+   support information. The skills-only bundle does not run a local server.
+   The full plugin's local MCP runs in Claude Code and Cowork, not claude.ai.
 4. Resolve portal findings and submit for review. Publish through the portal
    once approved.
 
@@ -107,7 +120,7 @@ the listing assets and other fields requested by the portal. See the
   host you are submitting to. Test a clean machine where practical, including
   missing-binary diagnostics and the installed binary's platform requirements.
 - Prepare publisher/contact information, accurate screenshots, support links,
-  and a listing icon (not yet included here),
+  and review the included official Ponko listing icon,
   and any privacy/terms URLs the selected route requires. This package does not
   invent legal policies or claim a publisher has been verified.
 - Document that the plugin can inspect/change local game state and write local

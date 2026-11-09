@@ -87,6 +87,16 @@ In Claude Code:
 
 Restart Claude Code, approve the MCP connection if prompted, and try
 `/ponko:ponko-setup`, `/ponko:ponko-inspect`, or `/ponko:ponko-profile`.
+The full Claude plugin uses a bundled Node.js launcher to start the executable
+configured in `mcp.json`. Install Node.js for this route. Other hosts use the
+portable MCP definition directly.
+
+For the public Claude Directory submission, use the generated
+[`submissions/claude`](submissions/claude) folder. It supplies all four workflows
+and documentation without registering a local server, so it does not require
+the local-MCP organization verification shown by the portal. Runtime tools can
+be configured separately with the MCP-only command below. See
+[the submission instructions](MARKETPLACES.md#claude--anthropic).
 
 For a local checkout, run this from your **game** project:
 
@@ -146,7 +156,7 @@ Restart Cursor or run **Developer: Reload Window**, then verify Ponko under
 files rather than symlinking from another directory: Cursor skips external
 symlink targets. Recopy the updated package when developing.
 
-MCP-only alternative: merge the `mcpServers.ponko` entry from [.mcp.json](.mcp.json)
+MCP-only alternative: merge the `mcpServers.ponko` entry from [configs/stdio.mcp.json](configs/stdio.mcp.json)
 into your game's `.cursor/mcp.json`, preserving existing servers. This provides
 tools without the bundled skills. See [Cursor plugins](https://cursor.com/docs/plugins).
 
@@ -193,7 +203,7 @@ Ponko and review the trust prompt. The workspace format uses `servers`, not
 ### Other MCP clients
 
 Use a **local stdio server** with command `ponko-mcp` and no arguments. Clients
-using an `mcpServers` map can use [.mcp.json](.mcp.json) as a template. Each client
+using an `mcpServers` map can use [configs/stdio.mcp.json](configs/stdio.mcp.json) as a template. Each client
 has its own config location and skill support; an MCP config alone adds tools.
 
 ## 3. Connect a game
@@ -237,7 +247,9 @@ disable every side effect (for example, captures and traces can write files).
 | `plugin.json`, `mcp.json` | Portable Agent Plugins package; canonical metadata and MCP config |
 | `.claude-plugin/` | Claude Code manifest and self-hosted marketplace |
 | `.codex-plugin/`, `.agents/plugins/` | Codex compatibility manifest and marketplace |
-| `.cursor-plugin/`, `.mcp.json` | Cursor manifest and host MCP compatibility config |
+| `.cursor-plugin/` | Cursor manifest (uses portable `mcp.json`) |
+| `.mcp.json`, `scripts/launch-mcp.cjs` | Claude's inspectable MCP entry point |
+| `submissions/claude/` | Generated skills-only Claude Directory source |
 | `gemini-extension.json`, `GEMINI.md` | Gemini CLI extension |
 | `skills/` | Shared engine guidance, setup, inspection, and profiling workflows |
 | `configs/` | MCP-only and observation templates |
@@ -247,6 +259,7 @@ is needed only for repository maintenance, not plugin use:
 
 ```sh
 python3 scripts/package.py
+python3 -m unittest discover -s tests -v
 python3 scripts/package.py --check --zip
 claude plugin validate . --strict
 python3 scripts/smoke_mcp.py /absolute/path/to/ponko-mcp
@@ -258,6 +271,11 @@ an empty temporary registry in full and read-only modes. It never connects to
 your games. The ZIP is written to `dist/ponko-<version>.zip`; it contains the plugin
 files, not the engine executable. Host UI discovery and a real game session
 still need manual acceptance in each host.
+
+The second archive, `dist/ponko-claude-directory-<version>.zip`, contains only the
+Claude Directory skills bundle. Neither archive includes repository maintenance
+or test scripts. Both include the official icon from `https://ponko.dev/favicon.svg`,
+rasterized to a square PNG for the directory.
 
 See [MARKETPLACES.md](MARKETPLACES.md) for public directory submission steps,
 including the extra requirements for a local MCP server.

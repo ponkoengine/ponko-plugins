@@ -1,6 +1,6 @@
 {
   "name": "ponko",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Inspect, debug, and profile local Ponko Engine games with MCP tools and guided workflows.",
   "author": {
     "name": "Ponko Engine",
@@ -15,5 +15,6 @@
     "mcp",
     "debugging",
     "profiling"
-  ]
+  ],
+  "logo": "./assets/icon.png"
 }

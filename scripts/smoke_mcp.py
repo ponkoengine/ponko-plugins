@@ -2,7 +2,6 @@
 """Exercise the real MCP stdio protocol against an isolated, empty registry."""
 
 import json
-import os
 from pathlib import Path
 import subprocess
 import sys
@@ -14,7 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 def check(binary, read_only):
     plugin = json.loads((ROOT / "plugin.json").read_text())
     with tempfile.TemporaryDirectory(prefix="ponko-mcp-smoke-") as directory:
-        env = {**os.environ, "HOME": directory, "LOCALAPPDATA": directory,
+        env = {"HOME": directory, "LOCALAPPDATA": directory,
+               "TMPDIR": directory, "TMP": directory, "TEMP": directory,
                "CRABBY_INSTANCES_DIR": str(Path(directory) / "instances")}
         messages = [
             {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {

@@ -1,6 +1,6 @@
 {
   "name": "ponko",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Inspect, debug, and profile local Ponko Engine games with MCP tools and guided workflows.",
   "author": {
     "name": "Ponko Engine",
@@ -27,8 +27,9 @@
     "defaultPrompt": [
       "Connect to my Ponko game and inspect its current state.",
       "Profile my Ponko game and identify the slowest systems."
-    ]
+    ],
+    "logo": "./assets/icon.png"
   },
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json"
+  "mcpServers": "./configs/stdio.mcp.json"
 }
