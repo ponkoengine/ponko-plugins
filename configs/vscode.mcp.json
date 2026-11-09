@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "ponko": {
+      "type": "stdio",
+      "command": "ponko-mcp",
+      "args": []
+    }
+  }
+}

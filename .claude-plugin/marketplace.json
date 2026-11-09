@@ -1,0 +1,17 @@
+{
+  "name": "ponko-plugins",
+  "owner": {
+    "name": "Ponko Engine",
+    "url": "https://github.com/ponkoengine"
+  },
+  "metadata": {
+    "description": "Inspect, debug, and profile local Ponko Engine games with MCP tools and guided workflows."
+  },
+  "plugins": [
+    {
+      "name": "ponko",
+      "source": "./",
+      "description": "Inspect, debug, and profile local Ponko Engine games with MCP tools and guided workflows."
+    }
+  ]
+}

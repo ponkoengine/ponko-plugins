@@ -1,0 +1,31 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ponko",
+  "version": "0.1.0",
+  "description": "Inspect, debug, and profile local Ponko Engine games with MCP tools and guided workflows.",
+  "author": {
+    "name": "Ponko Engine",
+    "url": "https://github.com/ponkoengine"
+  },
+  "homepage": "https://github.com/ponkoengine/ponko",
+  "repository": "https://github.com/ponkoengine/ponko-plugins",
+  "license": "MIT",
+  "keywords": ["ponko", "game-development", "mcp", "debugging", "profiling"],
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true,
+      "onboardingSkill": "./skills/ponko-setup/SKILL.md",
+      "interface": {
+        "displayName": "Ponko Engine",
+        "shortDescription": "Inspect and profile local Ponko games",
+        "longDescription": "Connect to local Ponko Engine games to inspect entities and resources, debug simulations, capture frames, and measure performance. Requires the ponko-mcp executable and a local game with its control endpoint enabled.",
+        "developerName": "Ponko Engine",
+        "category": "Developer Tools",
+        "defaultPrompt": [
+          "Connect to my Ponko game and inspect its current state.",
+          "Profile my Ponko game and identify the slowest systems."
+        ]
+      }
+    }
+  }
+}

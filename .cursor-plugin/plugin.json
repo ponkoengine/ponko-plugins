@@ -1,0 +1,19 @@
+{
+  "name": "ponko",
+  "version": "0.1.0",
+  "description": "Inspect, debug, and profile local Ponko Engine games with MCP tools and guided workflows.",
+  "author": {
+    "name": "Ponko Engine",
+    "url": "https://github.com/ponkoengine"
+  },
+  "homepage": "https://github.com/ponkoengine/ponko",
+  "repository": "https://github.com/ponkoengine/ponko-plugins",
+  "license": "MIT",
+  "keywords": [
+    "ponko",
+    "game-development",
+    "mcp",
+    "debugging",
+    "profiling"
+  ]
+}
