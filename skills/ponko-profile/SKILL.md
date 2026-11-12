@@ -12,6 +12,15 @@ Compare CPU work, GPU time, display wait, pass costs, entity/triangle counts,
 and the heaviest systems or meshes. A large display wait alone does not identify
 a slow gameplay system. A headless report cannot establish rendering cost.
 
+Before comparing quality or performance, read
+`render_inspector.quality_autotune` in `perf_report` when the server provides
+it. If it is not null, the game lets the engine adjust render scale and shadow
+resolution from GPU timings: record the active choices, pins, freeze state,
+reason and recent decisions, and have the game freeze or disable it for a
+controlled comparison so quality does not change mid-measurement. When GPU
+timings are unavailable the engine makes no automatic changes; do not base
+quality advice on CPU frame time as a stand-in for GPU cost.
+
 Use `record_trace` for hitches when the task calls for deeper measurement. Use
 `perf_hud` and a screenshot for an on-screen report when useful. Both can affect
 the session or write artifacts; keep them within the user's requested scope.
