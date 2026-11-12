@@ -9,7 +9,10 @@ the game is headless. Release and debug results are not interchangeable.
 
 Collect `perf_report` and `system_timings` before suggesting an optimization.
 Compare CPU work, GPU time, display wait, pass costs, entity/triangle counts,
-and the heaviest systems or meshes. A large display wait alone does not identify
+and the heaviest systems or meshes. When the server provides
+`render_inspector.counts.state_changes` (pipelines, bind groups, vertex and
+index buffers, draws for the last recorded frame), use it to tell recording
+cost from shading cost; it is null in headless or 2D-only games. A large display wait alone does not identify
 a slow gameplay system. A headless report cannot establish rendering cost.
 
 Before comparing quality or performance, read
