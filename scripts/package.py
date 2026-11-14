@@ -18,7 +18,9 @@ def adapters():
     )}
     openai = plugin["extensions"]["com.openai"]
     return {
-        ".claude-plugin/plugin.json": {**identity, "icon": "./assets/icon.png"},
+        ".claude-plugin/plugin.json": {
+            **identity, **plugin["extensions"]["com.anthropic"], "icon": "./assets/icon.png",
+        },
         ".cursor-plugin/plugin.json": {**identity, "logo": "./assets/icon.png"},
         ".codex-plugin/plugin.json": {
             **identity, **openai, "skills": "./skills/", "mcpServers": "./configs/stdio.mcp.json",
