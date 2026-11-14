@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 import subprocess
 import sys
-import tempfile
 import unittest
 from unittest.mock import patch
 import zipfile
@@ -21,57 +20,30 @@ class DistributionTests(unittest.TestCase):
             self.assertIn("ponko/skills/ponko/references/docs.md", names)
             self.assertIn("ponko/" + manifest["icon"].removeprefix("./"), names)
             mcp = json.loads(archive.read("ponko/.mcp.json"))
-            launcher = mcp["mcpServers"]["ponko"]["args"][0]
-            self.assertIn("ponko/" + launcher.removeprefix("${CLAUDE_PLUGIN_ROOT}/"), names)
-            self.assertIn("ponko/mcp.json", names)
-            self.assertNotIn("ponko/scripts/package.py", names)
-            self.assertNotIn("ponko/scripts/smoke_mcp.py", names)
+            # The directory only accepts local MCP commands it can follow, so the
+            # Claude entry runs the installed executable with no bundled script.
+            portable = json.loads(archive.read("ponko/mcp.json"))
+            self.assertEqual(mcp["mcpServers"], portable["mcpServers"])
+            scripts = [n for n in names if n.endswith((".js", ".cjs", ".mjs", ".sh", ".py"))]
+            self.assertEqual(scripts, [])
 
-    def test_smoke_child_does_not_receive_installer_credentials(self):
+    def test_smoke_child_runs_with_an_isolated_environment(self):
         spec = importlib.util.spec_from_file_location("smoke", ROOT / "scripts/smoke_mcp.py")
         smoke = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(smoke)
         # Stop at the process boundary: inspect the actual environment the smoke
-        # runner gives a child without touching the machine's games or secrets.
+        # runner gives a child without touching the machine's games.
         class Captured(Exception):
             pass
         def capture(*args, **kwargs):
-            self.assertTrue("PONKO_TEST_CREDENTIAL" not in kwargs["env"],
-                            "Smoke runner forwarded the synthetic credential")
+            self.assertNotIn("PONKO_TEST_MARKER", kwargs["env"],
+                             "Smoke runner forwarded the parent environment")
             self.assertIn("CRABBY_INSTANCES_DIR", kwargs["env"])
             raise Captured
-        with patch.dict("os.environ", {"PONKO_TEST_CREDENTIAL": "synthetic-test-value"}):
+        with patch.dict("os.environ", {"PONKO_TEST_MARKER": "1"}):
             with patch.object(smoke.subprocess, "run", side_effect=capture):
                 with self.assertRaises(Captured):
                     smoke.check(sys.executable, False)
-
-    def test_launcher_reports_missing_configured_executable_on_stderr(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / "scripts").mkdir()
-            launcher = ROOT / "scripts/launch-mcp.cjs"
-            (root / "scripts/launch-mcp.cjs").write_bytes(launcher.read_bytes())
-            (root / "mcp.json").write_text(json.dumps({"mcpServers": {
-                "test": {"command": "ponko-test-nonexistent-binary", "args": []}}}))
-            result = subprocess.run(["node", str(root / "scripts/launch-mcp.cjs")],
-                                    capture_output=True, text=True)
-            self.assertNotEqual(result.returncode, 0)
-            self.assertEqual(result.stdout, "")
-            self.assertIn("ponko-test-nonexistent-binary", result.stderr)
-
-    def test_launcher_preserves_stdio_and_child_exit_status(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / "scripts").mkdir()
-            (root / "scripts/launch-mcp.cjs").write_bytes((ROOT / "scripts/launch-mcp.cjs").read_bytes())
-            (root / "mcp.json").write_text(json.dumps({"mcpServers": {
-                "test": {"command": sys.executable, "args": ["-c",
-                    "import sys; print(sys.stdin.readline().strip()); sys.exit(7)"]}}}))
-            result = subprocess.run(["node", str(root / "scripts/launch-mcp.cjs")],
-                                    input='{"jsonrpc":"2.0"}\n', capture_output=True, text=True)
-            self.assertEqual(result.returncode, 7)
-            self.assertEqual(result.stdout, '{"jsonrpc":"2.0"}\n')
-            self.assertEqual(result.stderr, "")
 
 
 if __name__ == "__main__":

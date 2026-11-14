@@ -87,13 +87,12 @@ In Claude Code:
 
 Restart Claude Code, approve the MCP connection if prompted, and try
 `/ponko:ponko-setup`, `/ponko:ponko-inspect`, or `/ponko:ponko-profile`.
-The full Claude plugin uses a bundled Node.js launcher to start the executable
-configured in `mcp.json`. Install Node.js for this route. Other hosts use the
-portable MCP definition directly.
+Like every other host, the Claude plugin starts the installed `ponko-mcp`
+directly; it bundles no launcher script and needs no Node.js.
 
 For the public Claude Directory submission, use this repository's root (`.`),
 branch `main`. The same package includes all skills, docs, the icon, and the MCP
-launcher. See [the submission instructions](MARKETPLACES.md#claude--anthropic).
+server entry. See [the submission instructions](MARKETPLACES.md#claude--anthropic).
 
 For a local checkout, run this from your **game** project:
 
@@ -245,7 +244,7 @@ disable every side effect (for example, captures and traces can write files).
 | `.claude-plugin/` | Claude Code manifest and self-hosted marketplace |
 | `.codex-plugin/`, `.agents/plugins/` | Codex compatibility manifest and marketplace |
 | `.cursor-plugin/` | Cursor manifest (uses portable `mcp.json`) |
-| `.mcp.json`, `scripts/launch-mcp.cjs` | Claude's inspectable MCP entry point |
+| `.mcp.json` | Claude's MCP entry (generated from `mcp.json`) |
 | `gemini-extension.json`, `GEMINI.md` | Gemini CLI extension |
 | `skills/` | Shared engine guidance, setup, inspection, and profiling workflows |
 | `configs/` | MCP-only and observation templates |
@@ -268,9 +267,11 @@ your games. The ZIP is written to `dist/ponko-<version>.zip`; it contains the pl
 files, not the engine executable. Host UI discovery and a real game session
 still need manual acceptance in each host.
 
-The single release archive includes the full plugin and the official icon from
-`https://ponko.dev/favicon.svg`, rasterized to a square PNG. Repository maintenance
-and test scripts are excluded from the archive.
+The single release archive includes the full plugin and the official red panda
+icon from `https://ponko.dev/favicon.svg`, rasterized onto the site's dark
+1024×1024 app tile (the same artwork as `apple-touch-icon.png`). Re-render
+`assets/icon.png` whenever the website logo changes. The archive contains no
+scripts; repository maintenance and test scripts are excluded.
 
 See [MARKETPLACES.md](MARKETPLACES.md) for public directory submission steps,
 including the extra requirements for a local MCP server.

@@ -1,6 +1,7 @@
 # Publishing Ponko plugins
 
-Verified against the linked vendor documentation on 2026-11-09. A repository
+Verified against the linked vendor documentation on 2026-11-09; Claude
+directory findings updated 2026-11-14. A repository
 marketplace and a vendor's public directory are separate distribution channels.
 This repository supplies installable packages and catalogs; it does not imply
 vendor approval or an existing public listing.
@@ -23,12 +24,24 @@ client's plugin update/install controls.
 
 Submit the repository root (`.`) in `ponkoengine/ponko-plugins`, branch `main`.
 It is the same full package used for direct installation: all four skills,
-documentation, the official icon, and a local MCP server entry point. The release
+documentation, the official icon, and a local MCP server entry. The release
 archive is `dist/ponko-<version>.zip`.
 
-The Claude MCP command uses a bundled Node.js launcher reading the canonical
-`mcp.json`. The portal restricts local MCP servers to Verified organizations;
-the launcher fixes command inspection but does not satisfy that account requirement.
+`.mcp.json` runs the user's installed `ponko-mcp` directly (generated from the
+canonical `mcp.json`). The plugin bundles no scripts, hooks, or executables, and
+it reads no credentials: `ponko-mcp` needs no API key or token.
+
+What to expect from the directory's review, for an organization that is not
+Verified:
+
+| Finding | Status |
+| --- | --- |
+| Scripts the validator couldn't follow; files outside the allowed types | Fixed in 0.1.3: the Node.js launcher was removed. |
+| Uses a credential from the user's machine | Nothing in the plugin reads or sends one. If the hold remains, reply that the only command is the user's own `ponko-mcp`, which talks to games on `localhost` only. |
+| Image or font file that the plugin's code could run | `assets/icon.png` is only the listing icon; nothing runs it. It stays held until a reviewer confirms that. |
+| Field from another tool's manifest (`icon`) | No action needed; the directory uses it for the listing. |
+| agent-plugins manifest detected (root `plugin.json`) | Informational; it serves other hosts. |
+| Local MCP server not on claude.ai; accepted only from Verified organizations | Informational for now. If the directory starts refusing local MCP servers from unverified organizations, verify the organization, or submit a copy without `.mcp.json` (skills only; users then run `claude mcp add --scope user ponko -- ponko-mcp`). |
 
 1. Run `claude plugin validate . --profile directory --strict` and test the plugin in Claude Code
    against a disposable game. Check the current

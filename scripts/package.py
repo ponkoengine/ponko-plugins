@@ -23,11 +23,7 @@ def adapters():
         ".codex-plugin/plugin.json": {
             **identity, **openai, "skills": "./skills/", "mcpServers": "./configs/stdio.mcp.json",
         },
-        ".mcp.json": {"mcpServers": {
-            name: {"command": "node", "args": [
-                "${CLAUDE_PLUGIN_ROOT}/scripts/launch-mcp.cjs", name,
-            ]} for name in servers
-        }},
+        ".mcp.json": {"mcpServers": servers},
         "configs/stdio.mcp.json": {"mcpServers": servers},
         "gemini-extension.json": {
             "name": plugin["name"], "version": plugin["version"],
@@ -81,7 +77,7 @@ def main():
         output = ROOT / "dist" / f"ponko-{version}.zip"
         files = [ROOT / p for p in [
             "plugin.json", "mcp.json", "GEMINI.md", "README.md", "LICENSE",
-            "MARKETPLACES.md", "scripts/launch-mcp.cjs", "assets/icon.png", *generated,
+            "MARKETPLACES.md", "assets/icon.png", *generated,
         ]]
         files.extend(sorted((ROOT / "skills").rglob("*.md")))
         output.parent.mkdir(exist_ok=True)
