@@ -24,6 +24,19 @@ controlled comparison so quality does not change mid-measurement. When GPU
 timings are unavailable the engine makes no automatic changes; do not base
 quality advice on CPU frame time as a stand-in for GPU cost.
 
+For GPU memory questions, read `render_inspector.gpu_memory_bytes` in
+`perf_report`: every texture and buffer the engine holds, by class (frame
+targets, shadows, atlases, textures, meshes, ...), its `total`, and the
+platform's own `adapter` figure where there is one. `assets.gpu` covers the
+game's assets only; do not treat it as the whole footprint (it repeats the
+engine's total as `all_gpu_memory_bytes`). When the server offers the
+`gpu_allocations` parameter, pass `true` (or a count for the largest) to list
+each render target, post-processing image, shadow map and buffer with its
+label, size, format, samples, usage and bytes in
+`render_inspector.gpu_allocations`; ask for it only when needed, as it can be
+long. Compare totals across `set_graphics_quality` to measure what a preset
+costs.
+
 Use `record_trace` for hitches when the task calls for deeper measurement. Use
 `perf_hud` and a screenshot for an on-screen report when useful. Both can affect
 the session or write artifacts; keep them within the user's requested scope.
